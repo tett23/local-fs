@@ -4,5 +4,43 @@
   "main": "index.js",
   "author": "tett23 <tett23@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "modules": false,
+          "targets": {
+            "node": "8.10",
+            "browsers": "> 0.25%, not dead"
+          },
+          "spec": true,
+          "loose": true,
+          "useBuiltIns": "usage",
+          "corejs": 3
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
+      [
+        "@babel/plugin-proposal-object-rest-spread",
+        {
+          "loose": true,
+          "useBuiltIns": true
+        },
+        "foo"
+      ],
+      "babel-plugin-styled-components"
+    ]
+  },
+  "devDependencies": {
+    "fake-indexeddb": "^3.0.0"
+  }
 }

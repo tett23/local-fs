@@ -1,0 +1,31 @@
+{
+  "module": "esnext",
+  "moduleResolution": "node",
+  "target": "es6",
+  "allowSyntheticDefaultImports": true,
+  "newLine": "LF",
+  "sourceMap": true,
+  "jsx": "react",
+  "lib": [
+    "DOM",
+    "WebWorker",
+    "es2015",
+    "es2016",
+    "es2017",
+    "es2018",
+    "es2019",
+    "es2020"
+  ],
+  "strict": true,
+  "noFallthroughCasesInSwitch": true,
+  "noImplicitAny": false,
+  "noImplicitReturns": true,
+  "noImplicitThis": false,
+  "noImplicitUseStrict": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": false,
+  "strictNullChecks": true,
+  "esModuleInterop": true,
+  "allowJs": true,
+  "resolveJsonModule": true
+}

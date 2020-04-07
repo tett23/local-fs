@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "tett23 <tett23@gmail.com>",
+  "repository": "ssh://git@github.com/tett23/local-fs.git",
   "license": "MIT",
   "private": true,
   "workspaces": {
@@ -10,5 +11,15 @@
       "packages/*"
     ],
     "nohoist": []
+  },
+  "dependencies": {
+    "@types/node": "^13.9.8",
+    "jest": "^25.2.4",
+    "ts-jest": "^25.3.0",
+    "ts-polyfill": "^3.8.2",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.4"
   }
 }

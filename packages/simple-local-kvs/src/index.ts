@@ -10,8 +10,8 @@ export type KVS = {
   delete: (key: string) => Promise<boolean | Error>;
 };
 
-export default async function(): Promise<KVS | Error> {
-  const kvs = await getKVS();
+export default async function(indexedDB: IDBFactory): Promise<KVS | Error> {
+  const kvs = await getKVS(indexedDB);
   if (kvs instanceof Error) {
     return kvs;
   }
@@ -23,8 +23,8 @@ export default async function(): Promise<KVS | Error> {
   };
 }
 
-async function getKVS(): Promise<IDBDatabase | Error> {
-  const openRequest = window.indexedDB.open(DBNaame, Version);
+async function getKVS(indexedDB: IDBFactory): Promise<IDBDatabase | Error> {
+  const openRequest = indexedDB.open(DBNaame, Version);
 
   return new Promise<IDBDatabase | Error>((resolve) => {
     openRequest.onerror = () => {
@@ -98,13 +98,15 @@ async function remove(db: IDBDatabase, key: string): Promise<boolean | Error> {
     .objectStore(StoreName)
     .delete(key);
 
-  return new Promise<boolean | Error>((resolve) => {
+  const ret = new Promise<boolean | Error>((resolve) => {
     req.onerror = () => {
       resolve(req.error || new Error('Unexpected error.'));
     };
 
-    req.onsuccess = () => {
+    req.onsuccess = (a) => {
       resolve(true);
     };
   }).catch((err: Error) => err);
+
+  return ret;
 }
