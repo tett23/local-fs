@@ -10,6 +10,7 @@ export type KVS = {
   delete: (key: string) => Promise<boolean | Error>;
   keys: () => Promise<string[] | Error>;
   clear: () => Promise<boolean | Error>;
+  exists: (key: string) => Promise<boolean | Error>;
 };
 
 export default async function (
@@ -28,6 +29,7 @@ export default async function (
     delete: (key: string) => remove(kvs, storeName, key),
     clear: () => clear(kvs, storeName),
     keys: () => keys(kvs, storeName),
+    exists: (key: string) => exists(kvs, storeName, key),
   };
 }
 
@@ -135,24 +137,15 @@ async function keys(
   const req = db
     .transaction(storeName, 'readwrite')
     .objectStore(storeName)
-    .openKeyCursor();
+    .getAllKeys();
 
-  let ret = [];
-  await new Promise<boolean | Error>((resolve) => {
+  const ret = await new Promise<string[] | Error>((resolve) => {
     req.onerror = () => {
       resolve(req.error || new Error('Unexpected error.'));
     };
 
-    req.onsuccess = (e: any) => {
-      const cursor = e.target.result;
-      if (cursor == null) {
-        resolve(true);
-        return;
-      }
-
-      ret.push(cursor.key);
-
-      cursor.continue();
+    req.onsuccess = (e) => {
+      resolve((e.target as any).result);
     };
   }).catch((err: Error) => err);
 
@@ -175,6 +168,29 @@ async function clear(
 
     req.onsuccess = () => {
       resolve(true);
+    };
+  }).catch((err: Error) => err);
+
+  return ret;
+}
+
+async function exists(
+  db: IDBDatabase,
+  storeName: string,
+  key: string,
+): Promise<boolean | Error> {
+  const req = db
+    .transaction(storeName, 'readwrite')
+    .objectStore(storeName)
+    .getKey(key);
+
+  const ret = new Promise<boolean | Error>((resolve) => {
+    req.onerror = () => {
+      resolve(req.error || new Error('Unexpected error.'));
+    };
+
+    req.onsuccess = (e) => {
+      resolve((e.target as any).result === key);
     };
   }).catch((err: Error) => err);
 

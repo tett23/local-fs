@@ -78,4 +78,16 @@ describe('KVS', () => {
       expect(await kvs.keys()).toEqual([]);
     });
   });
+
+  describe('exists', () => {
+    beforeEach(async () => {
+      await kvs.put('key1', 'foo');
+      await kvs.put('key2', 'bar');
+    });
+
+    it('checks existance for key', async () => {
+      expect(await kvs.exists('key1')).toBe(true);
+      expect(await kvs.exists('does_not_exist')).toBe(false);
+    });
+  });
 });
